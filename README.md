@@ -1,6 +1,6 @@
-# Tanam User Service
+# Tanam Report Service
 
-API is accessible on [api-user-tanam.herokuapp.com](https://api-user-tanam.herokuapp.com).<br />
+API is accessible on [api-report-tanam.herokuapp.com](https://api-report-tanam.herokuapp.com).<br />
 
 This project was bootstrapped with [Express Generator](https://expressjs.com/en/starter/generator.html).
 
@@ -22,7 +22,7 @@ Install required dependencies.
 ### `npm start`
 
 Runs the app in the development mode.<br />
-API will run on [http://localhost:5000](http://localhost:5000).
+API will run on [http://localhost:6001](http://localhost:6001).
 
 ### `npm run lint`
 

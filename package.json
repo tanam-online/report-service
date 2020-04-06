@@ -1,5 +1,5 @@
 {
-  "name": "user-service",
+  "name": "report-service",
   "version": "1.0.0",
   "private": true,
   "scripts": {
