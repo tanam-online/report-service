@@ -24,6 +24,11 @@ Install required dependencies.
 Runs the app in the development mode.<br />
 API will run on [http://localhost:6001](http://localhost:6001).
 
+### `npm run dev`
+
+Runs the app in the development mode with hot reload.<br />
+API will run on [http://localhost:6001](http://localhost:6001).
+
 ### `npm run lint`
 
 Checks if there is any warning or wrong in codes lint.
