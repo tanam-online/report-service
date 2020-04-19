@@ -10,7 +10,6 @@ const sendEmailWorker = async () => {
   try {
     await Email.sendEmail()
 
-
     const client = await pool.connect()
     const lahans = await client.query('SELECT id FROM lahan;')
     const ids = (lahans) ? lahans.rows : null

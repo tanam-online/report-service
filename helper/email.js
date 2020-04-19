@@ -1,3 +1,3 @@
 exports.sendEmail = () => {
-	console.log('email sent')
+  console.log('email sent')
 }
