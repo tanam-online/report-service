@@ -1,6 +1,3 @@
-var pool = require('./db/config')
-
-exports.generateFile = () => {
-
+exports.generateFile = async () => {
   console.log('file generated in X format')
 }

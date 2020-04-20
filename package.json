@@ -10,12 +10,12 @@
   },
   "dependencies": {
     "@sendgrid/mail": "^7.0.1",
+    "axios": "^0.19.2",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
-    "morgan": "~1.9.1",
-    "sendgrid": "^5.2.3"
+    "morgan": "~1.9.1"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
