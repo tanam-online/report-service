@@ -1,36 +1,19 @@
 require('dotenv').config()
 
-var pool = require('./db/config')
-var Email = require('../helper/email')
+var axios = require('axios')
+var Mail = require('../helper/mail')
 
 /*
  * Send email periodically.
  */
 const sendEmailWorker = async () => {
   try {
-    await Email.sendEmail()
-
-    const client = await pool.connect()
-    const lahans = await client.query('SELECT id FROM lahan;')
-    const ids = (lahans) ? lahans.rows : null
-    const cuacaEnum = ['cerah', 'berawan', 'hujan']
-    ids.map(async id => {
-      const payload = [
-        id.id,
-        Math.floor(Math.random() * 50),
-        Math.floor(Math.random() * 50),
-        Math.floor(Math.random() * 50),
-        Math.floor(Math.random() * 50),
-        Math.floor(Math.random() * 50),
-        Math.floor(Math.random() * 50),
-        cuacaEnum[Math.floor(Math.random() * 3)]
-      ]
-      await client.query(`INSERT INTO data_sensor (id_lahan, suhu, kelembaban_udara, tekanan_udara, kecepatan_angin, 
-                          kelembaban_tanah, intensitas_cahaya, cuaca, waktu) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 
-                          CURRENT_TIMESTAMP)`, payload)
-    })
-    console.log('Data updated at ' + new Date(Date.now()).toLocaleString())
-    client.release()
+  const response = await axios.get('http://api-user-tanam.herokuapp.com/users')
+  const users = response.data
+  users.map(async user => {
+    await Mail.sendEmail(user)
+  })
+console.log('Daily report sent at ' + new Date(Date.now()).toLocaleString())
   } catch (err) {
     console.error(err)
     console.log('Error: ' + err + ' at ' + new Date(Date.now()).toLocaleString())
