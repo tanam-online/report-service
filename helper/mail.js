@@ -7,7 +7,7 @@ exports.sendEmail = async (recipient) => {
     from: 'report@tanam.online',
     fromname: 'Report Service Tanam',
     subject: 'Laporan Harian Lahan Anda',
-    html: `<p>Halo, ${recipient.name}! Berikut adalah laporan lahan Anda untuk hari ini.</p>
+    html: `<p>Halo, ${recipient.nama}! Berikut adalah laporan lahan Anda untuk hari ini.</p>
       <p>Klik tautan berikut: 
         <a href="http://api-report-tanam.herokuapp.com/download/${recipient.id}" target="_blank">
           Unduh file laporan
