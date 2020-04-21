@@ -1,20 +1,24 @@
 var sgMail = require('@sendgrid/mail')
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
-exports.sendEmail = async (recipient) => {
+exports.sendEmail = async (user, lands) => {
+  let html = `<p>Halo, ${user.nama}! Berikut adalah laporan lahan Anda untuk hari ini.</p>
+                <p>Klik tautan berikut:`
+  lands.map(land => {
+    html += `<br><a href="http://api-report-tanam.herokuapp.com/download/${land.id}" target="_blank">
+               Unduh file laporan ${land.nama}
+             </a>`
+  })
+  html += '</p>'
   const msg = {
-    to: recipient.email,
-    from: 'report@tanam.online',
-    fromname: 'Report Service Tanam',
+    to: user.email,
+    from: {
+      email: 'report@tanam.online',
+      name: 'Report Service Tanam'
+    },
     subject: 'Laporan Harian Lahan Anda',
-    html: `<p>Halo, ${recipient.nama}! Berikut adalah laporan lahan Anda untuk hari ini.</p>
-      <p>Klik tautan berikut: 
-        <a href="http://api-report-tanam.herokuapp.com/download/${recipient.id}" target="_blank">
-          Unduh file laporan
-        </a>
-      </p>`
+    html: html
   }
-  const result = await sgMail.send(msg)
-  console.log(result)
-  return result
+  await sgMail.send(msg)
+  return 'Email sent succcessfully'
 }
