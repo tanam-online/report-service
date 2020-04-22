@@ -11,7 +11,7 @@ This project was bootstrapped with [Express Generator](https://expressjs.com/en/
 ``` bash
 [GET] '/' = Check if API is live
 [GET] '/download/:landId/:timeStart?/:timeEnd?' = Download land report by land id
-[GET] '/send-email:/id' = Send email to user by user id
+[GET] '/send-email/:id' = Send email to user by user id
 ```
 
 ## Available Scripts
