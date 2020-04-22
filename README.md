@@ -1,5 +1,7 @@
 # Tanam Report Service
 
+API is documented at Swagger [https://app.swaggerhub.com/apis-docs/isfanr/Tanam/1.0.0](https://app.swaggerhub.com/apis-docs/isfanr/Tanam/1.0.0).<br />
+
 API is accessible on [api-report-tanam.herokuapp.com](https://api-report-tanam.herokuapp.com).<br />
 
 This project was bootstrapped with [Express Generator](https://expressjs.com/en/starter/generator.html).
@@ -8,7 +10,8 @@ This project was bootstrapped with [Express Generator](https://expressjs.com/en/
 
 ``` bash
 [GET] '/' = Check if API is live
-TBD...
+[GET] '/download/:landId/:timeStart?/:timeEnd?' = Download land report by land id
+[GET] '/send-email:/id' = Send email to user by user id
 ```
 
 ## Available Scripts
