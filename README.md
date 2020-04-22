@@ -1,6 +1,6 @@
 # Tanam Report Service
 
-API is documented at Swagger [https://app.swaggerhub.com/apis-docs/isfanr/Tanam/1.0.0](https://app.swaggerhub.com/apis-docs/isfanr/Tanam/1.0.0).<br />
+API is documented at Swagger [app.swaggerhub.com/apis-docs/isfanr/Tanam](https://app.swaggerhub.com/apis-docs/isfanr/Tanam/1.0.0).<br />
 
 API is accessible on [api-report-tanam.herokuapp.com](https://api-report-tanam.herokuapp.com).<br />
 
