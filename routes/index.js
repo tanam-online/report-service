@@ -2,12 +2,6 @@ var express = require('express')
 var router = express.Router()
 var axios = require('axios')
 var Excel = require('exceljs')
-// require('core-js/modules/es.promise');
-// require('core-js/modules/es.object.assign');
-// require('core-js/modules/es.object.keys');
-// require('regenerator-runtime/runtime');
-// npm install core-js/modules/es.promise core-js/modules/es.object.assign core-js/modules/es.object.keys regenerator-runtime/runtime
-//var Excel = require('exceljs/dist/es5')
 var Mail = require('../helper/mail')
 var File = require('../helper/file')
 
@@ -17,39 +11,6 @@ var File = require('../helper/file')
 router.get('/', (req, res) => {
   res.send('You are connected')
 })
-
-
-router.get('/test', async (req, res) => {
-  var Excel = require('exceljs');
-  var workbook = new Excel.Workbook();
-  var worksheet = workbook.addWorksheet('My Sheet');
-  worksheet.columns = [
-      { header: 'Id', key: 'id', width: 10 },
-      { header: 'Name', key: 'name', width: 32 },
-      { header: 'D.O.B.', key: 'DOB', width: 10 }
-  ];
-  worksheet.addRow({id: 1, name: 'John Doe', dob: new Date(1970,1,1)});
-  worksheet.addRow({id: 2, name: 'Jane Doe', dob: new Date(1965,1,7)});
-  //workbook.commit();
-  /*workbook.xlsx.writeFile('./temp.xlsx').then(function() {
-      // done
-      console.log('file is written');
-  });
-*/
-  async function sendWorkbook(workbook, response) { 
-    var fileName = 'FileName.xlsx';
-
-    response.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
-
-     await workbook.xlsx.write(response);
-
-    response.end();
-  }
-  await sendWorkbook(workbook, res)
-})
-
-
 
 /*
 * Download report endpoint.
@@ -70,81 +31,34 @@ router.get('/download/:landId/:timeStart?/:timeEnd?', async (req, res) => {
     if (!data || data.length === 0) {
       return res.status(400).send({ status: 400, message: 'There is no data' })
     }
-    const result = await File.generateFile(data)
-
     const date = new Date().getDate() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getFullYear()
-    const fileName = 'Laporan_Lahan_' + req.params.landId + '_' + date + '.xlsx'
-
-    // res.writeHead(200, {
-    // 'Content-Disposition': 'attachment; filename=' + fileName,
-    // 'Transfer-Encoding': 'chunked',
-    // 'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    // })
-
-    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    res.setHeader('Content-Disposition', 'attachment; filename=' + fileName)
-
-    let workbook = new Excel.stream.xlsx.WorkbookWriter({ stream: res })
-    let worksheet = workbook.addWorksheet('Sheet Laporan')
-    console.log(worksheet)
-    worksheet.addTable = {
-      name: 'Report',
-      ref: 'A1',
-      headerRow: true,
-      totalsRow: true,
-      style: {
-        theme: 'TableStyleDark3',
-        showRowStripes: true
-      },
-      columns: [
-        { name: 'Date', totalsRowLabel: 'Totals:', filterButton: true },
-        { name: 'Amount', totalsRowFunction: 'sum', filterButton: false }
-      ],
-      rows: [
-        [new Date('2019-07-20'), 70.10],
-        [new Date('2019-07-21'), 70.60],
-        [new Date('2019-07-22'), 70.10]
-      ]
-    }
-    console.log(worksheet)
-    //console.log(respSheet)
-    // worksheet.addRow(['foo', 'bar']).commit()
-    // await worksheet.commit()
-    // await workbook.commit()
-
-    // var workbook = new Excel.Workbook();
-    // var worksheet = workbook.addWorksheet('Sheet Laporan');
-
-    // worksheet.columns = [
-    //     { header: 'Id', key: 'id', width: 10 },
-    //     { header: 'Name', key: 'name', width: 32 },
-    //     { header: 'D.O.B.', key: 'DOB', width: 10 }
-    // ];
-    // worksheet.addRow({id: 1, name: 'John Doe', dob: new Date(1970,1,1)});
-    // worksheet.addRow({id: 2, name: 'Jane Doe', dob: new Date(1965,1,7)});
-
-    // var tempFilePath = tempfile('.xlsx');
-    // workbook.xlsx.writeFile(tempFilePath).then(function() {
-    //     console.log('file is written');
-    //     res.sendFile(tempFilePath, function(err){
-    //         console.log('---------- error downloading file: ' + err);
-    //     });
-    // });
-
-
-    console.log(res)
-
-    // worksheet.commit()
-    // workbook.commit()
-
-    await workbook.xlsx.write(res)
-
-    res.end();
-    const resultJson = {
-      status: 'Laporan has been downloaded'
-    }
-    //res.write(chunk)
-    // res.send(resultJson)
+    const filename = 'Laporan_Lahan_' + req.params.landId + '_' + date
+    var workbook = new Excel.Workbook()
+    var worksheet = workbook.addWorksheet('Sheet Laporan')
+    worksheet.addRow(['Rekap Laporan Lahan ' + req.params.landId + ' ' + date])
+    worksheet.mergeCells('A1', 'F1')
+    worksheet.columns = [
+      { key: 'A', width: 15 },
+      { key: 'B', width: 15 },
+      { key: 'C', width: 15 },
+      { key: 'D', width: 15 },
+      { key: 'E', width: 15 },
+      { key: 'F', width: 25 }
+    ]
+    worksheet.addRow(['Rata-rata', 'Suhu (C)', 'Kelembaban (%)', 'Cahaya (Cd/m2)', 'Angin (m/s)', 'Cuaca'])
+    worksheet.addRow([
+      'Rata-rata', data.average.suhu, data.average.kelembaban,
+      data.average.cahaya, data.average.angin, data.average.cuaca
+    ])
+    worksheet.mergeCells('A2', 'A3')
+    worksheet.addRow(['Suhu (C)', 'Kelembaban (%)', 'Cahaya (Cd/m2)', 'Angin (m/s)', 'Cuaca', 'Waktu (GMT)'])
+    data.sensor_data.map(item => {
+      worksheet.addRow([
+        item.suhu, item.kelembaban, item.cahaya,
+        item.angin, item.cuaca, item.waktu
+      ])
+    })
+    await File.sendWorkbook(workbook, res, filename)
   } catch (err) {
     console.error(err)
     return res.status(500).send(err)
