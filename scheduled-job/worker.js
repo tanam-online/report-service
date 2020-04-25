@@ -13,7 +13,9 @@ const sendEmailWorker = async () => {
     users.map(async user => {
       const responseLands = await axios.get(`http://api-land-tanam.herokuapp.com/lands/by-user/${user.id}`)
       const lands = responseLands.data.data
-      await Mail.sendEmail(user, lands)
+      if (lands && lands.length > 0) {
+        await Mail.sendEmail(user, lands)
+      }
     })
     console.log('Daily report sent at ' + new Date(Date.now()).toLocaleString())
   } catch (err) {
